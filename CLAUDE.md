@@ -8,9 +8,10 @@ This is a ROT13 encoder/decoder educational tool - a single-page web application
 
 ## Architecture
 
-- **Single HTML file**: `index.html` contains the complete application (HTML, CSS, JavaScript)
+- **Modular structure**: Separated into HTML, CSS, and JavaScript files
 - **Static site**: No build process or dependencies - runs directly in browser
 - **Educational focus**: Designed for learning classical cryptography concepts
+- **Class-based JavaScript**: ROT13Encoder class encapsulates all functionality
 
 ## Core Components
 
@@ -32,13 +33,19 @@ Since this is a static HTML site with no build process:
 - **Local testing**: Open `index.html` directly in browser or use `python -m http.server` for local server
 - **No build/lint/test commands**: Project uses vanilla HTML/CSS/JS without tooling
 
+## File Structure
+
+- `index.html`: Main HTML structure and markup
+- `styles.css`: All CSS styling and responsive design
+- `script.js`: JavaScript functionality using ROT13Encoder class
+
 ## Development Notes
 
 - Uses vanilla JavaScript (no frameworks or build tools)
 - Responsive design with CSS flexbox
 - Character highlighting uses DOM manipulation with class toggling
 - ROT13 implementation handles only ASCII A-Z and a-z (numbers/symbols unchanged)
-- All styles are embedded in `<style>` tag, all scripts in `<script>` tag
+- Modern JavaScript features: classes, arrow functions, async/await for clipboard API
 
 ## Deployment
 
@@ -53,6 +60,8 @@ This is a GitHub Pages site served from the main branch. Any changes to `index.h
 
 ## File Purpose
 
-- `index.html`: Complete application
+- `index.html`: Main HTML structure and markup
+- `styles.css`: All CSS styling and responsive design  
+- `script.js`: JavaScript functionality using ROT13Encoder class
 - `README.md`: Comprehensive project documentation in Japanese
 - `*.png`: Educational images showing cipher mechanics and screenshots

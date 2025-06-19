@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROT13エンコーダー（ROT13 Encoder）</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .cipher-tables {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .cipher-table {
+            border: 2px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .table-title {
+            background: #333;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            margin: 0;
+            font-size: 14px;
+        }
+        .cipher-row {
+            display: flex;
+        }
+        .cipher-cell {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .plain {
+            background: #e3f2fd;
+        }
+        .cipher {
+            background: #fff3e0;
+        }
+        .highlight {
+            background: #ffeb3b !important;
+            transform: scale(1.2);
+            z-index: 10;
+            position: relative;
+        }
+        .note {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .input-group {
+            position: relative;
+            margin: 10px 0;
+        }
+        .btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 5;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .btn.copy {
+            background: #2196F3;
+        }
+        .btn.copy:hover {
+            background: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 ROT13エンコーダー（ROT13 Encoder）</h1>
+        
+        <div class="cipher-tables">
+            <div class="cipher-table">
+                <div class="table-title">大文字</div>
+                <div class="cipher-row" id="upper-plain"></div>
+                <div class="cipher-row" id="upper-cipher"></div>
+            </div>
+            <div class="cipher-table">
+                <div class="table-title">小文字</div>
+                <div class="cipher-row" id="lower-plain"></div>
+                <div class="cipher-row" id="lower-cipher"></div>
+            </div>
+        </div>
+        
+        <label for="input">📝 入力テキスト:</label>
+        <div class="input-group">
+            <textarea id="input" placeholder="ここに文字を入力してください">Hello World!</textarea>
+            <button class="btn clear" onclick="clearInput()">クリア</button>
+        </div>
+        
+        <label for="output">🔒 変換結果:</label>
+        <div class="input-group">
+            <textarea id="output" readonly></textarea>
+            <button class="btn copy" onclick="copyResult()">コピー</button>
+        </div>
+        
+        <div class="note">
+            <strong>💡 ROT13について:</strong><br>
+            アルファベットを13文字ずらす暗号です。入力した文字が暗号表でハイライトされます。
+        </div>
+    </div>
+
+    <script>
+        function rot13(str) {
+            return str.replace(/[a-zA-Z]/g, function(char) {
+                const start = char <= 'Z' ? 65 : 97;
+                return String.fromCharCode(((char.charCodeAt(0) - start + 13) % 26) + start);
+            });
+        }
+
+        function createTable() {
+            const upperPlain = document.getElementById('upper-plain');
+            const upperCipher = document.getElementById('upper-cipher');
+            const lowerPlain = document.getElementById('lower-plain');
+            const lowerCipher = document.getElementById('lower-cipher');
+
+            for (let i = 0; i < 26; i++) {
+                // 大文字
+                const upperChar = String.fromCharCode(65 + i);
+                const upperCell1 = document.createElement('div');
+                upperCell1.className = 'cipher-cell plain';
+                upperCell1.textContent = upperChar;
+                upperCell1.id = 'up-' + upperChar;
+                upperPlain.appendChild(upperCell1);
+
+                const upperCipherChar = String.fromCharCode(65 + ((i + 13) % 26));
+                const upperCell2 = document.createElement('div');
+                upperCell2.className = 'cipher-cell cipher';
+                upperCell2.textContent = upperCipherChar;
+                upperCell2.id = 'uc-' + upperChar;
+                upperCipher.appendChild(upperCell2);
+
+                // 小文字
+                const lowerChar = String.fromCharCode(97 + i);
+                const lowerCell1 = document.createElement('div');
+                lowerCell1.className = 'cipher-cell plain';
+                lowerCell1.textContent = lowerChar;
+                lowerCell1.id = 'lp-' + lowerChar;
+                lowerPlain.appendChild(lowerCell1);
+
+                const lowerCipherChar = String.fromCharCode(97 + ((i + 13) % 26));
+                const lowerCell2 = document.createElement('div');
+                lowerCell2.className = 'cipher-cell cipher';
+                lowerCell2.textContent = lowerCipherChar;
+                lowerCell2.id = 'lc-' + lowerChar;
+                lowerCipher.appendChild(lowerCell2);
+            }
+        }
+
+        function highlightChars(text) {
+            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+            
+            for (let char of text) {
+                if (/[A-Z]/.test(char)) {
+                    const plain = document.getElementById('up-' + char);
+                    const cipher = document.getElementById('uc-' + char);
+                    if (plain) plain.classList.add('highlight');
+                    if (cipher) cipher.classList.add('highlight');
+                } else if (/[a-z]/.test(char)) {
+                    const plain = document.getElementById('lp-' + char);
+                    const cipher = document.getElementById('lc-' + char);
+                    if (plain) plain.classList.add('highlight');
+                    if (cipher) cipher.classList.add('highlight');
+                }
+            }
+        }
+
+        function convert() {
+            const input = document.getElementById('input').value;
+            const output = rot13(input);
+            document.getElementById('output').value = output;
+            highlightChars(input);
+        }
+
+        function clearInput() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').value = '';
+            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+        }
+
+        function copyResult() {
+            const outputText = document.getElementById('output');
+            outputText.select();
+            outputText.setSelectionRange(0, 99999); // モバイル対応
+            
+            try {
+                document.execCommand('copy');
+                const btn = document.querySelector('.btn.copy');
+                const originalText = btn.textContent;
+                btn.textContent = 'コピー完了!';
+                btn.style.background = '#4CAF50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#2196F3';
+                }, 1000);
+            } catch (err) {
+                alert('コピーに失敗しました。手動でコピーしてください。');
+            }
+        }
+
+        window.onload = function() {
+            createTable();
+            convert();
+            document.getElementById('input').addEventListener('input', convert);
+        };
+    </script>
+</body>
+</html>

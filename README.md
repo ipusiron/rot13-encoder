@@ -1,6 +1,44 @@
+<!--
+---
+id: day005
+slug: rot13-encoder
+
+title: "ROT13 Encoder"
+
+subtitle_ja: "インタラクティブな置換表で学ぶROT13暗号"
+subtitle_en: "Learn ROT13 cipher with interactive substitution tables"
+
+description_ja: "ROT13（13文字シフト暗号）の動作原理を視覚的に学習できる教育用暗号ツール。リアルタイム変換とインタラクティブな置換表で古典暗号を体験できます。"
+description_en: "An educational cryptography tool for visually learning how ROT13 (13-character shift cipher) works. Experience classical cryptography with real-time conversion and interactive substitution tables."
+
+category_ja:
+  - 古典暗号
+  - 換字式暗号
+category_en:
+  - Classical Cryptography
+  - Substitution Cipher
+
+difficulty: 1
+
+tags:
+  - rot13
+  - caesar-cipher
+  - shift-cipher
+  - cryptography
+  - encoder
+  - decoder
+  - substitution-cipher
+
+repo_url: "https://github.com/ipusiron/rot13-encoder"
+demo_url: "https://ipusiron.github.io/rot13-encoder/"
+
+hub: true
+---
+-->
+
 # ROT13エンコーダー（ROT13 Encoder）
 
-**Day 5 - セキュリティツールをAIで作ってみよう 100日チャレンジ**
+**Day005 - セキュリティツールをAIで作ってみよう 100日チャレンジ**
 
 ## 📋 プロジェクト概要
 

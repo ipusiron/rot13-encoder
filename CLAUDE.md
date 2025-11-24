@@ -33,12 +33,6 @@ Since this is a static HTML site with no build process:
 - **Local testing**: Open `index.html` directly in browser or use `python -m http.server` for local server
 - **No build/lint/test commands**: Project uses vanilla HTML/CSS/JS without tooling
 
-## File Structure
-
-- `index.html`: Main HTML structure and markup
-- `styles.css`: All CSS styling and responsive design
-- `script.js`: JavaScript functionality using ROT13Encoder class
-
 ## Development Notes
 
 - Uses vanilla JavaScript (no frameworks or build tools)
@@ -49,19 +43,19 @@ Since this is a static HTML site with no build process:
 
 ## Deployment
 
-This is a GitHub Pages site served from the main branch. Any changes to `index.html` are automatically deployed to the live demo at: https://ipusiron.github.io/rot13-encoder/
+This is a GitHub Pages site served from the main branch. Any changes pushed to main are automatically deployed to the live demo at: https://ipusiron.github.io/rot13-encoder/
 
 ## Key Implementation Details
 
 - ROT13 logic: `((char.charCodeAt(0) - start + 13) % 26) + start` where start=65 for uppercase, 97 for lowercase
 - Cipher tables built dynamically with unique IDs for highlighting (`up-A`, `uc-A`, `lp-a`, `lc-a`)
 - Real-time conversion triggered by `input` event listener
-- Copy functionality uses deprecated `document.execCommand('copy')` for broad browser compatibility
+- Copy functionality uses modern `navigator.clipboard` API with `document.execCommand('copy')` fallback
 
-## File Purpose
+## Files
 
 - `index.html`: Main HTML structure and markup
-- `styles.css`: All CSS styling and responsive design  
+- `styles.css`: All CSS styling and responsive design
 - `script.js`: JavaScript functionality using ROT13Encoder class
 - `README.md`: Comprehensive project documentation in Japanese
 - `*.png`: Educational images showing cipher mechanics and screenshots

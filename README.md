@@ -56,15 +56,21 @@ ROT13（Caesar cipher with shift 13）の動作原理を視覚的に学習でき
 
 ## 📸 スクリーンショット
 
-![デスクトップでのROT13変換](assets/screenshot.png)
+<p align="center">
+  <img src="assets/screenshot.png" alt="デスクトップでのROT13変換">
+</p>
 
 > *「Hello, World! 123」を変換し、対応する文字を黄色と太枠で強調しています。*
 
-![スマートフォンでのROT13変換](assets/screenshot2.png)
+<p align="center">
+  <img src="assets/screenshot2.png" alt="スマートフォンでのROT13変換" width="390">
+</p>
 
 > *幅390pxでは、置換表を13列×2段に折り返して表示します。*
 
-![全角英字を含む入力の注意表示](assets/screenshot3.png)
+<p align="center">
+  <img src="assets/screenshot3.png" alt="全角英字を含む入力の注意表示">
+</p>
 
 > *「ＨＥＬＬＯ hello」の半角英字だけを変換し、全角英字についての注意を表示します。*
 

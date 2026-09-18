@@ -22,13 +22,14 @@ const textPairs = [
     ['text', 'cell-plain'], ['text', 'cell-cipher'], ['text', 'cell-highlight'],
     ['muted', 'surface'], ['on-accent', 'title-bg'], ['on-accent', 'btn-clear'],
     ['on-accent', 'btn-clear-hover'], ['on-accent', 'btn-copy'], ['on-accent', 'btn-copy-hover'],
-    ['on-accent', 'btn-swap'], ['on-accent', 'btn-swap-hover'], ['hint-text', 'hint-bg']
+    ['on-accent', 'btn-swap'], ['on-accent', 'btn-swap-hover'], ['hint-text', 'hint-bg'],
+    ['btn-copy', 'page-bg'], ['btn-copy-hover', 'page-bg']
 ];
 const nonTextPairs = [
     ['border', 'surface'], ['focus', 'surface'], ['focus', 'page-bg'],
     ['highlight-frame', 'cell-plain'], ['highlight-frame', 'cell-cipher'], ['highlight-frame', 'cell-highlight']
 ];
-assert.equal(textPairs.length, 15);
+assert.equal(textPairs.length, 17);
 assert.equal(nonTextPairs.length, 6);
 for (const [label, pairs, minimum] of [['文字', textPairs, 4.5], ['非テキスト', nonTextPairs, 3]]) {
     for (const [foreground, background] of pairs) {

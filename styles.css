@@ -207,9 +207,30 @@ textarea {
 }
 
 textarea:focus-visible,
-button:focus-visible {
+button:focus-visible,
+.site-footer a:focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
+}
+
+.site-footer {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.site-footer a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 8px;
+    color: var(--btn-copy);
+    text-underline-offset: 3px;
+}
+
+.site-footer a:hover {
+    color: var(--btn-copy-hover);
 }
 
 @media (max-width: 700px) {

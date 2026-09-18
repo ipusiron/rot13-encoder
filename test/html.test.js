@@ -54,6 +54,14 @@ test('HTMLの見出し、main、noscript、通知領域が仕様に一致する'
     assert.doesNotMatch(tag('stats') + tag('output'), /aria-live|role="status"/);
 });
 
+test('mainの外にGitHubリポジトリーへ戻るフッターリンクがある', () => {
+    const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>([\s\S]*?)<\/footer>/)?.[1];
+    assert.ok(footer, 'フッターが必要');
+    assert.ok(html.indexOf('</main>') < html.indexOf('<footer'));
+    assert.match(footer, /<a href="https:\/\/github\.com\/ipusiron\/rot13-encoder">GitHubでソースコードを見る<\/a>/);
+    assert.doesNotMatch(footer, /target="_blank"/);
+});
+
 for (const token of ['innerHTML', 'execCommand', 'alert(', 'console.log', '.style.', 'onclick']) {
     test(`DOM処理に${token}を含まない`, () => assert.ok(!script.includes(token)));
 }

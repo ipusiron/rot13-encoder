@@ -25,7 +25,7 @@ test('READMEの置換表は2行あり、全文字がbuildTableと一致する', 
 });
 
 test('READMEの相対画像参照は7件以上あり、すべて実在する', () => {
-    const images = [...readme.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)]
+    const images = [...readme.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g), ...readme.matchAll(/<img\b[^>]*src="([^"]+)"/g)]
         .map(match => match[1]).filter(url => !/^https?:\/\//.test(url));
     assert.ok(images.length >= 7, `相対画像の数: ${images.length}`);
     for (const name of images) assert.ok(fs.existsSync(path.join(root, name)), name);
@@ -50,6 +50,17 @@ test('READMEのYAMLは先頭37行のHTMLコメント、ブロック形式、指�
         const actual = yaml.match(new RegExp(`^${key}:\\s*(.+)$`, 'm'))?.[1].replace(/^"|"$/g, '');
         assert.equal(actual, value, key);
     }
+});
+
+test('READMEのスクリーンショット3枚は中央揃えで代替テキストを持つ', () => {
+    const centered = [...readme.matchAll(/<p align="center">\s*<img\b([^>]+)>\s*<\/p>/g)];
+    assert.equal(centered.length, 3);
+    for (const name of ['screenshot.png', 'screenshot2.png', 'screenshot3.png']) {
+        const attributes = centered.find(match => match[1].includes(`src="assets/${name}"`))?.[1];
+        assert.ok(attributes, name);
+        assert.match(attributes, /alt="[^"]+"/);
+    }
+    assert.match(readme, /<img src="assets\/screenshot2\.png"[^>]+width="390"/);
 });
 
 test('READMEはツール100の名称とURLを使い、旧名称と誤った変換を含まない', () => {

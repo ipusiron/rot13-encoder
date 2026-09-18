@@ -3,44 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
+    <meta name="description" content="ROT13（13文字ずらしのシフト暗号）を置換表で学べるツール。入力と同時に変換し、対応する文字をハイライトする">
     <title>ROT13エンコーダー（ROT13 Encoder）</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <main class="container">
         <h1>🔐 ROT13エンコーダー（ROT13 Encoder）</h1>
+        <noscript>このツールの利用には JavaScript が必要です。</noscript>
         
         <div class="cipher-tables">
             <div class="cipher-table">
-                <div class="table-title">大文字</div>
-                <div class="cipher-row" id="upper-plain"></div>
-                <div class="cipher-row" id="upper-cipher"></div>
+                <h2 class="table-title">大文字</h2>
+                <div class="cipher-grid" id="upper-grid" role="list" aria-label="大文字の置換表"></div>
             </div>
             <div class="cipher-table">
-                <div class="table-title">小文字</div>
-                <div class="cipher-row" id="lower-plain"></div>
-                <div class="cipher-row" id="lower-cipher"></div>
+                <h2 class="table-title">小文字</h2>
+                <div class="cipher-grid" id="lower-grid" role="list" aria-label="小文字の置換表"></div>
             </div>
         </div>
+        <p class="table-legend">上段が入力の文字、下段がROT13で変換した文字。入力に含まれる文字は、黄色と太枠で強調される。</p>
         
         <label for="input">📝 入力テキスト:</label>
         <div class="input-group">
             <textarea id="input" placeholder="ここに文字を入力してください">Hello World!</textarea>
-            <button class="btn clear" onclick="clearInput()">クリア</button>
+            <div class="actions">
+                <button class="btn clear" id="clearBtn" type="button">クリア</button>
+            </div>
         </div>
         
         <label for="output">🔒 変換結果:</label>
         <div class="input-group">
-            <textarea id="output" readonly></textarea>
-            <button class="btn copy" onclick="copyResult()">コピー</button>
+            <textarea id="output" readonly aria-describedby="stats"></textarea>
+            <div class="actions">
+                <button class="btn swap" id="swapBtn" type="button">結果を入力へ</button>
+                <button class="btn copy" id="copyBtn" type="button">コピー</button>
+            </div>
         </div>
+        <p id="stats" class="stats"></p>
+        <p id="hint" class="hint" role="status" hidden>全角の英字は変換されません。ROT13の対象は半角のA〜Zとa〜zだけです。</p>
+        <p id="statusMessage" class="status" role="status" aria-live="polite"></p>
         
         <div class="note">
             <strong>💡 ROT13について:</strong><br>
             アルファベットを13文字ずらす暗号です。入力した文字が置換表でハイライトされます。
         </div>
-    </div>
+    </main>
 
-    <script src="script.js"></script>
+    <script src="rot13.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

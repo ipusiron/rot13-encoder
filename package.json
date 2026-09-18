@@ -1,0 +1,7 @@
+{
+    "name": "rot13-encoder",
+    "private": true,
+    "scripts": {
+        "test": "node --test"
+    }
+}

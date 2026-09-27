@@ -38,6 +38,8 @@ hub: true
 
 # ROT13 Encoder - 置換表で学ぶROT13暗号ツール
 
+[English](README.en.md) · 日本語
+
 ![GitHub Repo stars](https://img.shields.io/github/stars/ipusiron/rot13-encoder?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ipusiron/rot13-encoder?style=social)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ipusiron/rot13-encoder)
@@ -85,6 +87,7 @@ ROT13（Caesar cipher with shift 13）の動作原理を視覚的に学習でき
 - **全角英字の注意**：全角の英字が含まれる場合に注意を表示
 - **クリアボタン**：入力テキストの一括削除
 - **コピーボタン**：変換結果をワンクリックでクリップボードにコピー
+- **日本語・英語の切り替え**：右上のボタンで表示言語を切り替え、選択をlocalStorageに記憶
 
 ## 📖 使い方
 
@@ -99,6 +102,7 @@ ROT13（Caesar cipher with shift 13）の動作原理を視覚的に学習でき
 - **クリア**：緑色の「クリア」ボタンで入力をリセットし、入力欄にフォーカスを戻す
 - **結果を入力へ**：変換結果を入力欄へ移して再変換し、もう一度押すと入力が元に戻る
 - **コピー**：青色の「コピー」ボタンで変換結果をクリップボードへ。コピーできない場合は、選択された変換結果を手動でコピーする
+- **言語の切り替え**：右上のボタンで日本語と英語を切り替える。`?lang=en`や`?lang=ja`をURLに付けても指定できる
 
 ### 変換例
 
@@ -220,11 +224,12 @@ GitHub Actionsでも、pushとpull requestの際に自動実行します。
 - 全UTF-16コード単位65,536個について、2回変換すると元に戻り、変わるのはASCII英字52個だけであることを検証
 - READMEの変換例、置換表、画像参照、YAMLメタデータ、サイト名の綴りを検証
 - HTMLの属性、配色のコントラスト、ファイルの整形を検証
+- 日本語と英語の辞書のキーの一致、差し込みの整合、画面の状態を文言で判定していないことを検証
 
 ## 🔒 セキュリティ・プライバシー
 
 変換処理のための通信は行わず、入力内容は保存しません。
-localStorageやCookieも使用しません。
+localStorageに保存するのは表示言語の選択だけで、Cookieは使用しません。
 値は`textContent`と`value`にだけ入れ、HTMLとして解釈させません。
 入力のエスケープ、trim、Unicodeの正規化、文字数の切り詰めは行いません。
 
@@ -239,7 +244,9 @@ rot13-encoder/
 ├── styles.css                 # 配色と13列×2段のモバイル表示
 ├── script.js                  # ROT13EncoderクラスによるDOM処理
 ├── rot13.js                   # DOMに依存しない変換と集計
+├── i18n.js                    # 日本語と英語のメッセージ
 ├── README.md                  # 使い方と暗号の解説
+├── README.en.md               # 英語版のREADME
 ├── CLAUDE.md                  # 開発者向けの説明
 ├── LICENSE                    # MITライセンス
 ├── package.json               # 依存なしのテストコマンド
@@ -250,6 +257,7 @@ rot13-encoder/
 │   ├── readme.test.js         # 文書と実装の照合
 │   ├── html.test.js           # HTMLとDOM処理の静的検証
 │   ├── contrast.test.js       # 文字と非テキストのコントラスト
+│   ├── i18n.test.js           # 辞書とHTMLの対応、言語切り替えの実装
 │   └── format.test.js         # 行数と行長の検証
 ├── assets/
 │   ├── screenshot.png        # デスクトップ表示

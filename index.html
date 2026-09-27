@@ -11,51 +11,55 @@
 </head>
 <body>
     <main class="container">
-        <h1>🔐 ROT13エンコーダー（ROT13 Encoder）</h1>
-        <noscript>このツールの利用には JavaScript が必要です。</noscript>
-        
+        <div class="toolbar">
+            <button class="lang-button" id="langToggle" type="button" data-i18n="app.langButton" data-i18n-aria-label="app.langAria" aria-label="言語を切り替える">English</button>
+        </div>
+        <h1><span aria-hidden="true">🔐</span> <span data-i18n="app.heading">ROT13エンコーダー（ROT13 Encoder）</span></h1>
+        <noscript><span lang="ja">このツールの利用には JavaScript が必要です。</span> / <span lang="en">This tool requires JavaScript.</span></noscript>
+
         <div class="cipher-tables">
             <div class="cipher-table">
-                <h2 class="table-title">大文字</h2>
-                <div class="cipher-grid" id="upper-grid" role="list" aria-label="大文字の置換表"></div>
+                <h2 class="table-title" data-i18n="table.upper">大文字</h2>
+                <div class="cipher-grid" id="upper-grid" role="list" data-i18n-aria-label="table.upperAria" aria-label="大文字の置換表"></div>
             </div>
             <div class="cipher-table">
-                <h2 class="table-title">小文字</h2>
-                <div class="cipher-grid" id="lower-grid" role="list" aria-label="小文字の置換表"></div>
+                <h2 class="table-title" data-i18n="table.lower">小文字</h2>
+                <div class="cipher-grid" id="lower-grid" role="list" data-i18n-aria-label="table.lowerAria" aria-label="小文字の置換表"></div>
             </div>
         </div>
-        <p class="table-legend">上段が入力の文字、下段がROT13で変換した文字。入力に含まれる文字は、黄色と太枠で強調される。</p>
-        
-        <label for="input">📝 入力テキスト:</label>
+        <p class="table-legend" data-i18n="table.legend">上段が入力の文字、下段がROT13で変換した文字。入力に含まれる文字は、黄色と太枠で強調される。</p>
+
+        <label for="input" data-i18n="input.label">📝 入力テキスト:</label>
         <div class="input-group">
-            <textarea id="input" placeholder="ここに文字を入力してください">Hello World!</textarea>
+            <textarea id="input" data-i18n-placeholder="input.placeholder" placeholder="ここに文字を入力してください">Hello World!</textarea>
             <div class="actions">
-                <button class="btn clear" id="clearBtn" type="button">クリア</button>
+                <button class="btn clear" id="clearBtn" type="button" data-i18n="button.clear">クリア</button>
             </div>
         </div>
-        
-        <label for="output">🔒 変換結果:</label>
+
+        <label for="output" data-i18n="output.label">🔒 変換結果:</label>
         <div class="input-group">
             <textarea id="output" readonly aria-describedby="stats"></textarea>
             <div class="actions">
-                <button class="btn swap" id="swapBtn" type="button">結果を入力へ</button>
-                <button class="btn copy" id="copyBtn" type="button">コピー</button>
+                <button class="btn swap" id="swapBtn" type="button" data-i18n="button.swap">結果を入力へ</button>
+                <button class="btn copy" id="copyBtn" type="button" data-i18n="button.copy">コピー</button>
             </div>
         </div>
         <p id="stats" class="stats"></p>
-        <p id="hint" class="hint" role="status" hidden>全角の英字は変換されません。ROT13の対象は半角のA〜Zとa〜zだけです。</p>
+        <p id="hint" class="hint" role="status" hidden data-i18n="hint.fullwidth">全角の英字は変換されません。ROT13の対象は半角のA〜Zとa〜zだけです。</p>
         <p id="statusMessage" class="status" role="status" aria-live="polite"></p>
-        
+
         <div class="note">
-            <strong>💡 ROT13について:</strong><br>
-            アルファベットを13文字ずらす暗号です。入力した文字が置換表でハイライトされます。
+            <strong data-i18n="note.title">💡 ROT13について:</strong><br>
+            <span data-i18n="note.body">アルファベットを13文字ずらす暗号です。入力した文字が置換表でハイライトされます。</span>
         </div>
     </main>
 
     <footer class="site-footer">
-        <a href="https://github.com/ipusiron/rot13-encoder">GitHubでソースコードを見る</a>
+        <a href="https://github.com/ipusiron/rot13-encoder" data-i18n="footer.repo">GitHubでソースコードを見る</a>
     </footer>
 
+    <script src="i18n.js" defer></script>
     <script src="rot13.js" defer></script>
     <script src="script.js" defer></script>
 </body>

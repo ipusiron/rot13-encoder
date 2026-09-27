@@ -1,9 +1,8 @@
-const COPY_LABEL = 'コピー';
-
 class ROT13Encoder {
     constructor() {
         this.copyTimer = null;
         this.statusTimer = null;
+        this.statusKey = null;
         this.init();
     }
 
@@ -17,6 +16,7 @@ class ROT13Encoder {
         for (let i = 0; i < 26; i++) {
             this.createCharacterCells(i, elements, table);
         }
+        this.updateTableLabels();
     }
 
     createCharacterCells(index, elements, table) {
@@ -25,11 +25,20 @@ class ROT13Encoder {
             const column = document.createElement('div');
             column.className = 'cipher-col';
             column.setAttribute('role', 'listitem');
-            column.setAttribute('aria-label', `${plain}は${cipher}になる`);
+            column.dataset.plain = plain;
+            column.dataset.cipher = cipher;
             this.createCell(column, plain, 'cipher-cell plain', `${prefix}p-${plain}`);
             this.createCell(column, cipher, 'cipher-cell cipher', `${prefix}c-${plain}`);
             elements[kind].appendChild(column);
         }
+    }
+
+    /** 読み上げ文は、セルの表示文字ではなくdatasetの値から組み立てる。 */
+    updateTableLabels() {
+        document.querySelectorAll('.cipher-col').forEach(column => {
+            const { plain, cipher } = column.dataset;
+            column.setAttribute('aria-label', I18n.t('table.mapAria', { plain, cipher }));
+        });
     }
 
     createCell(parent, content, className, id) {
@@ -43,7 +52,7 @@ class ROT13Encoder {
 
     highlightChars(text) {
         this.clearHighlights();
-        
+
         const used = Rot13.usedLetters(text);
         for (const char of used.upper) {
             this.highlightCharacter(`up-${char}`, `uc-${char}`);
@@ -74,14 +83,14 @@ class ROT13Encoder {
         document.getElementById('output').value = output;
         this.highlightChars(input);
         const { converted, unchanged, fullwidth } = Rot13.countStats(input);
-        document.getElementById('stats').textContent = `変換した英字 ${converted}文字／そのままの文字 ${unchanged}文字`;
+        document.getElementById('stats').textContent = I18n.t('stats.counts', { converted, unchanged });
         document.getElementById('hint').hidden = fullwidth === 0;
     }
 
     clearInput() {
         document.getElementById('input').value = '';
         this.convert();
-        this.showStatus('入力をクリアしました。');
+        this.showStatus('status.cleared');
         document.getElementById('input').focus();
     }
 
@@ -89,17 +98,17 @@ class ROT13Encoder {
         const outputText = document.getElementById('output');
         const btn = document.getElementById('copyBtn');
         if (!outputText.value) {
-            this.showStatus('コピーする内容がありません。');
+            this.showStatus('status.copyEmpty');
             return;
         }
 
         try {
             await navigator.clipboard.writeText(outputText.value);
-            
+
             this.showCopySuccess(btn);
-            this.showStatus('変換結果をコピーしました。');
+            this.showStatus('status.copied');
         } catch (err) {
-            this.showStatus('コピーできませんでした。変換結果を選択してコピーしてください。');
+            this.showStatus('status.copyFailed');
             outputText.focus();
             outputText.select();
         }
@@ -107,10 +116,12 @@ class ROT13Encoder {
 
     showCopySuccess(btn) {
         clearTimeout(this.copyTimer);
-        btn.textContent = 'コピー完了!';
+        btn.dataset.copied = 'true';
+        btn.textContent = I18n.t('button.copied');
         btn.classList.add('is-copied');
         this.copyTimer = setTimeout(() => {
-            btn.textContent = COPY_LABEL;
+            delete btn.dataset.copied;
+            btn.textContent = I18n.t('button.copy');
             btn.classList.remove('is-copied');
         }, 1000);
     }
@@ -118,33 +129,49 @@ class ROT13Encoder {
     swapResult() {
         const output = document.getElementById('output').value;
         if (!output) {
-            this.showStatus('移す内容がありません。');
+            this.showStatus('status.swapEmpty');
             return;
         }
         const input = document.getElementById('input');
         input.value = output;
         this.convert();
         input.focus();
-        this.showStatus('変換結果を入力に移しました。もう一度押すと元に戻ります。');
+        this.showStatus('status.swapped');
     }
 
-    showStatus(message) {
+    /** 表示中の文言ではなく、メッセージのキーを覚えておく。 */
+    showStatus(key) {
         const status = document.getElementById('statusMessage');
         clearTimeout(this.statusTimer);
-        status.textContent = message;
+        this.statusKey = key;
+        status.textContent = I18n.t(key);
         this.statusTimer = setTimeout(() => {
+            this.statusKey = null;
             status.textContent = '';
         }, 4000);
     }
 
+    /** apply()が上書きしたボタンの状態と、表示中の通知を、新しい言語で組み直す。 */
+    redraw() {
+        this.updateTableLabels();
+        this.convert();
+        const btn = document.getElementById('copyBtn');
+        if (btn.dataset.copied === 'true') btn.textContent = I18n.t('button.copied');
+        if (this.statusKey) document.getElementById('statusMessage').textContent = I18n.t(this.statusKey);
+    }
+
     init() {
         document.addEventListener('DOMContentLoaded', () => {
+            I18n.init();
             this.createTable();
             this.convert();
             document.getElementById('input').addEventListener('input', () => this.convert());
             document.getElementById('clearBtn').addEventListener('click', () => this.clearInput());
             document.getElementById('swapBtn').addEventListener('click', () => this.swapResult());
             document.getElementById('copyBtn').addEventListener('click', () => this.copyResult());
+            document.getElementById('langToggle').addEventListener('click',
+                () => I18n.setLanguage(I18n.language === 'ja' ? 'en' : 'ja'));
+            document.addEventListener('languagechange', () => this.redraw());
         });
     }
 }

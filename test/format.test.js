@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
 const tests = fs.readdirSync(__dirname).filter(name => name.endsWith('.js')).map(name => `test/${name}`);
-const files = ['rot13.js', 'script.js', 'styles.css', 'index.html', ...tests];
+const files = ['rot13.js', 'script.js', 'i18n.js', 'styles.css', 'index.html', ...tests];
 
 for (const filename of files) {
     test(`整形: ${filename}の行長と行数`, () => {

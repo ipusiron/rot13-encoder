@@ -16,11 +16,12 @@ test('HTMLのviewport、CSP、referrer、descriptionが指定されている', (
     assert.match(html, /<meta\s+name="description"\s+content="[^"]+">/);
 });
 
-test('HTMLは古典スクリプト2本をdefer付きで正しい順に読み込む', () => {
+test('HTMLは古典スクリプト3本をdefer付きで正しい順に読み込む', () => {
     const scripts = html.match(/<script\b[^>]*>/g) ?? [];
-    assert.equal(scripts.length, 2);
-    assert.match(scripts[0], /src="rot13.js"/);
-    assert.match(scripts[1], /src="script.js"/);
+    assert.equal(scripts.length, 3);
+    assert.match(scripts[0], /src="i18n.js"/);
+    assert.match(scripts[1], /src="rot13.js"/);
+    assert.match(scripts[2], /src="script.js"/);
     for (const element of scripts) {
         assert.match(element, /\sdefer(?:\s|>)/);
         assert.doesNotMatch(element, /type="module"/);
@@ -29,13 +30,13 @@ test('HTMLは古典スクリプト2本をdefer付きで正しい順に読み込�
 });
 
 test('HTMLの必須ID、labelの参照先、ボタン属性が揃う', () => {
-    for (const id of ['input', 'output', 'clearBtn', 'swapBtn', 'copyBtn',
+    for (const id of ['input', 'output', 'clearBtn', 'swapBtn', 'copyBtn', 'langToggle',
         'stats', 'hint', 'statusMessage', 'upper-grid', 'lower-grid']) {
         assert.ok(tag(id), id);
     }
     for (const [, id] of html.matchAll(/<label\b[^>]*for="([^"]+)"/g)) assert.ok(tag(id), id);
     const buttons = html.match(/<button\b[^>]*>/g) ?? [];
-    assert.equal(buttons.length, 3);
+    assert.equal(buttons.length, 4);
     for (const button of buttons) assert.match(button, /\btype="button"/);
     assert.match(tag('output'), /\breadonly(?:\s|>)/);
     assert.match(tag('output'), /aria-describedby="stats"/);
@@ -58,7 +59,7 @@ test('mainの外にGitHubリポジトリーへ戻るフッターリンクがあ�
     const footer = html.match(/<footer\b[^>]*class="site-footer"[^>]*>([\s\S]*?)<\/footer>/)?.[1];
     assert.ok(footer, 'フッターが必要');
     assert.ok(html.indexOf('</main>') < html.indexOf('<footer'));
-    assert.match(footer, /<a href="https:\/\/github\.com\/ipusiron\/rot13-encoder">GitHubでソースコードを見る<\/a>/);
+    assert.match(footer, /<a href="https:\/\/github\.com\/ipusiron\/rot13-encoder"[^>]*>GitHubでソースコードを見る<\/a>/);
     assert.doesNotMatch(footer, /target="_blank"/);
 });
 

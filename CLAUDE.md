@@ -8,7 +8,7 @@ This is a ROT13 encoder/decoder educational tool - a single-page web application
 
 ## Architecture
 
-- **Modular structure**: HTML, CSS, DOM-independent rot13.js, and DOM-handling script.js
+- **Modular structure**: HTML, CSS, DOM-independent rot13.js, DOM-handling script.js, and i18n.js for the messages
 - **Static site**: No build process or dependencies - runs directly in browser
 - **Educational focus**: Designed for learning classical cryptography concepts
 - **Class-based JavaScript**: ROT13Encoder class handles the UI; Rot13 exposes pure functions
@@ -32,6 +32,7 @@ This is a ROT13 encoder/decoder educational tool - a single-page web application
 - Input/output text areas with real-time conversion
 - Interactive highlighting system that shows cipher relationships
 - Copy/clear and result-to-input buttons, conversion counts, and a fullwidth-letter hint
+- Language toggle in the top right that switches the interface between Japanese and English
 
 ## Development Commands
 
@@ -62,7 +63,9 @@ This is a GitHub Pages site served from the main branch. Any changes pushed to m
 - Real-time conversion triggered by `input` event listener
 - Copy uses navigator.clipboard only; on failure, select the output for manual copying
 - Copy labels and status messages use separate resettable timers; styling uses classes only
-- User data is rendered with textContent/value. No network requests, storage, or Unicode normalization
+- User data is rendered with textContent/value. No network requests and no Unicode normalization
+- localStorage holds only the selected language under `rot13-encoder-language`
+- UI state is never decided by comparing displayed text: the copy button uses `dataset.copied`, the status line remembers a message key, and the table reads `dataset.plain` / `dataset.cipher`
 - Meta CSP and no-referrer are set; inline event handlers and inline styles are not used
 
 ## Files
@@ -71,10 +74,12 @@ This is a GitHub Pages site served from the main branch. Any changes pushed to m
 - `styles.css`: All CSS styling and responsive design
 - `script.js`: JavaScript functionality using ROT13Encoder class
 - `rot13.js`: Pure conversion, table, letter collection, and statistics functions
+- `i18n.js`: Japanese and English dictionaries, `t()`, `apply()`, `init()`, and `setLanguage()`
 - `README.md`: Comprehensive project documentation in Japanese
+- `README.en.md`: The same documentation in English
 - `*.png`: Educational images showing cipher mechanics and screenshots
 - `assets/`: Three current screenshots (desktop, mobile, fullwidth hint)
-- `test/`: Logic, README, HTML, contrast, and formatting tests
+- `test/`: Logic, README, HTML, contrast, i18n, and formatting tests
 - `package.json`: Dependency-free npm test command
 - `.github/workflows/test.yml`: Node.js 22 CI
 - `LICENSE`: MIT License, Copyright (c) 2025 ipusiron

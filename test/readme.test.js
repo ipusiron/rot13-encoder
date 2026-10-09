@@ -85,3 +85,22 @@ test('MIT LICENSEが実在し、READMEからリンクされている', () => {
     assert.ok(license.includes('Copyright (c) 2025 ipusiron'));
     assert.match(readme, /\[MITライセンス\]\(\.\/LICENSE\)/);
 });
+
+test('ユースケースの「このツールならではの使い方」を rot13.js で再計算（日英）', () => {
+  const R = require('../rot13.js');
+  const path = require('node:path');
+  const fs = require('node:fs');
+  const root = path.join(__dirname, '..');
+  const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
+  const en = fs.readFileSync(path.join(root, 'README.en.md'), 'utf8');
+  assert.equal(R.rot13('HELLO'), 'URYYB');
+  assert.equal(R.rot13(R.rot13('HELLO')), 'HELLO');
+  const stats = R.countStats('Hello, World 123');
+  assert.deepEqual([stats.total, stats.converted, stats.unchanged], [16, 10, 6]);
+  assert.equal(R.rot13('A'), 'N');
+  assert.equal(R.rot13('B'), 'O');
+  for (const md of [readme, en]) {
+    assert.ok(md.includes('URYYB') && md.includes('Hello, World 123'));
+    assert.ok(md.includes('10') && md.includes('6'));
+  }
+});

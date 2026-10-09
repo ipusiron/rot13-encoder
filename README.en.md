@@ -182,6 +182,20 @@ GitHub Actions runs the same tests on every push and pull request.
 - HTML attributes, colour contrast and file formatting
 - Matching keys in the Japanese and English dictionaries, consistent placeholders, and the absence of state decided by comparing displayed text
 
+## 🎯 Use cases
+
+### Ways of using this tool in particular
+
+- Confirming the self-inverse transform that returns on a second pass (involution and function classes): ROT13 turns HELLO into URYYB, and a second pass returns HELLO. ROT13 shifts by 13 letters, and 13 twice is 26 and comes back. You can confirm, by passing it twice, that encryption and decryption are the same operation (its own inverse, an involution)
+- Confirming that non-letters are unchanged (encoding and character classes): applying ROT13 to `Hello, World 123` changes only the 10 letters and leaves the 6 characters of spaces, punctuation and digits as they are. Of 16 characters, 10 are converted and 6 unchanged. You can confirm that ROT13 acts only on letters, by the converted and unchanged counts
+- Confirming that letters 13 apart swap with each other (mapping classes): ROT13 swaps letters 13 apart in the alphabet, such as A with N and B with O. The first 13 letters and the last 13 pair up one to one, and every letter has a fixed partner. You can confirm the round trip of A to N and N to A
+
+### General uses
+
+- Use it as a cover to temporarily hide an answer or a spoiler on a board or a review (anyone who knows the rule can read it)
+- Use it as material to learn the difference between encoding and encryption (ROT13 has no key and reverses by the rule alone)
+- Use it as a light cipher for puzzles and games
+
 ## 🔒 Security and privacy
 
 Nothing is sent over the network and no input is stored.
